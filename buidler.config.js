@@ -16,18 +16,17 @@ module.exports = {
       fork: `https://mainnet.infura.io/v3/${INFURA_ID}`,
       // Custom
       GelatoCore: "0x1d681d76ce96E4d70a88A00EBbcfc1E47808d0b8",
-      ConnectGelato: '0x37A7009d424951dd5D5F155fA588D9a03C455163',
+      ConnectGelato: "0x37A7009d424951dd5D5F155fA588D9a03C455163",
       InstaIndex: "0x2971AdFa57b20E5a416aE5a708A8655A9c74f723",
       InstaList: "0x4c8a1BEb8a87765788946D6B19C6C6355194AbEb",
       InstaConnectors: "0xD6A602C01a023B98Ecfb29Df02FBA380d3B21E0c",
       InstaAccount: "0x939Daad09fC4A9B8f8A9352A485DAb2df4F4B3F8",
       ConnectAuth: "0xd1aFf9f2aCf800C876c409100D6F39AEa93Fc3D9",
       ConnectBasic: "0x6a31c5982C5Bc5533432913cf06a66b6D3333a95",
-      ConnectMaker: "0xac02030d8a8F49eD04b2f52C394D3F901A10F8A9",
-      ConnectCompound: "0x07F81230d73a78f63F0c2A3403AD281b067d28F8",
+      ConnectUniswapV2: "0x62EbfF47B2Ba3e47796efaE7C51676762dC961c0",
       DAI: "0x6b175474e89094c44da98b954eedeac495271d0f",
-      DAI_UNISWAP: "0x2a1530C4C41db0B0b2bB646CB5Eb1A67b7158667",
-      CDAI: "0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643",
+      DAI_UNISWAP: "0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11", // UNISWAP V2 ETH/DAI UniswapV2Pair Address
+      WETH: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
     },
   },
   solc: {
