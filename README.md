@@ -36,8 +36,10 @@ This is the ordered steps followed by this test :
 - Triggers Action as Executor on the gelato protocol.
 
 
-Use Take Profit and Stop Loss strategy on DeFi space.
+`2_get_back_to_fiat_during_bear_market_ETH_USD`
 
+Same as `1_get_back_to_fiat_during_bear_market_DAI_ETH`, but using ETH/USD instead of DAI/ETH asset to decide if we need to short the position.
+### Run Test
 Run test :
 ```
 npx buidler test
