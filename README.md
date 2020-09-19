@@ -1,7 +1,7 @@
 # TakeAndStop
 
 <p align="center">
-  <img width="500" height="500" src="https://raw.githubusercontent.com/Gauddel/TakeAndStop/master/assets/Take%26Stop.png">
+  <img width="400" height="380" src="https://raw.githubusercontent.com/Gauddel/TakeAndStop/master/assets/Take%26Stop.png">
 </p>
 
 Use Take Profit and Stop Loss strategy on DeFi space.
