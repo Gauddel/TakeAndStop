@@ -130,7 +130,7 @@ describe("Stop Loss strategy for ETH/USD decrease, and we own some Ether on our 
         );
     })
 
-    it("#1: Stop Loss if Ether price is too low against USD", async function() {
+    it("Stop Loss if Ether price is too low against USD", async function() {
 
         await userWallet.sendTransaction({
             to: dsa.address,

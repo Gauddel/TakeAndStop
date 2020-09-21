@@ -17,7 +17,10 @@ There are multiple solution to tackle this issue, each are their own pros and co
 
 With Take&Stop don't need to be an developer or have trust on third party to keep track of your position.
 
-## Dapp
+## Technologies
+- Geloto
+- InstaDapp
+- Uniswap
 
 ## For Developer
 ### Test Task&Stop

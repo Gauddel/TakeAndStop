@@ -27,7 +27,6 @@ describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our 
     // Deployed instances
     let connectUniswapV2;
     let connectGelato;
-    let connectAuth;
     let weth;
 
     // Contracts to deploy and use for local testing
@@ -130,7 +129,11 @@ describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our 
         );
     })
 
-    it("#1: Stop Loss if Ether price is too low against DAI", async function() {
+    it("Stop Loss if Ether price is too low against DAI", async function() {
+
+        // #1 Send few ether on DeFi Smart Account. Now DSA have some position in regard to ether price.
+        // #2 Create the Stop Loss Condition.
+        // #3 
 
         await userWallet.sendTransaction({
             to: dsa.address,
