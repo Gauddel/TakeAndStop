@@ -25,6 +25,7 @@ module.exports = {
       ConnectAuth: "0xd1aFf9f2aCf800C876c409100D6F39AEa93Fc3D9",
       ConnectBasic: "0x6a31c5982C5Bc5533432913cf06a66b6D3333a95",
       ConnectUniswapV2: "0x62EbfF47B2Ba3e47796efaE7C51676762dC961c0",
+      ConditionBalance: "0xd69DB9852bAbf9e0bd73B8A090382573C7488154",
       DAI: "0x6b175474e89094c44da98b954eedeac495271d0f",
       // DAI_UNISWAP: "0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11", // UNISWAP V2 ETH/DAI UniswapV2Pair Address
       WETH: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
