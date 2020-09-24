@@ -137,28 +137,6 @@ task("abi-encode-withselector")
     }
   });
 
-  // task(
-  //   "migrate",
-  //   "deploy smart contract"
-  // )
-  //   .setAction(async (taskArgs) => {
-  //         const userWallet = await ethers.getSigners();
-  //         const userAddress = await userWallet[0].getAddress();
-  //         const url = "http://localhost:8545";
-  //         const provider = new ethers.providers.JsonRpcProvider(url);
-  //         const signer0 = provider.getSigner(0);
-  //         const signer1 = provider.getSigner(1);
-  //         // let web3Provider = new ethers.providers.Web3Provider(currentProvider);
-  //         //console.log(ethers.provider, '!!!!!!!!!!!!!!!!!!!!!! TEST !!!!!!!!!!!!!!!!!!!!!');
-  //         //console.log(signer0);
-  //         const PriceFeedDAIETH = await ethers.getContractFactory(
-  //           "PriceFeedDAIETH"
-  //         );
-  //         const priceFeedDAIETH = await PriceFeedDAIETH.deploy();
-  //         // await priceFeedDAIETH.deployed();
-  //         // console.log(priceFeedDAIETH.address);
-  //   })
-
   task(
     "fetchGelatoGasPrice",
     `Returns the current gelato gas price used for calling canExec and exec`

@@ -42,6 +42,10 @@ This is the ordered steps followed by this test :
 `2_get_back_to_fiat_during_bear_market_ETH_USD`
 
 Same as `1_get_back_to_fiat_during_bear_market_DAI_ETH`, but using ETH/USD instead of DAI/ETH asset to decide if we need to short the position.
+
+`5_get_back_to_fiat_during_bear_market_ETH_USD_with_Balance_Condition`
+
+Same as `2_get_back_to_fiat_during_bear_market_ETH_USD`, with balance check before executing action autonomously.
 ### Run Test
 Run test :
 ```
