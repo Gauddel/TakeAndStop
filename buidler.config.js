@@ -5,6 +5,7 @@ const GelatoCoreLib = require("@gelatonetwork/core");
 
 require("dotenv").config();
 const INFURA_ID = process.env.INFURA_ID;
+assert.ok(INFURA_ID, "no Infura ID in process.env");
 
 // ================================= CONFIG =========================================
 module.exports = {
@@ -27,7 +28,8 @@ module.exports = {
       DAI: "0x6b175474e89094c44da98b954eedeac495271d0f",
       // DAI_UNISWAP: "0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11", // UNISWAP V2 ETH/DAI UniswapV2Pair Address
       WETH: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-      DAIETHChainLinkAggregator: "0x773616E4d11A78F511299002da57A0a94577F1f4"
+      DAIETHChainLinkAggregator: "0x773616E4d11A78F511299002da57A0a94577F1f4",
+      ProviderModuleDSA: "0x0C25452d20cdFeEd2983fa9b9b9Cf4E81D6f2fE2"
     },
   },
   solc: {

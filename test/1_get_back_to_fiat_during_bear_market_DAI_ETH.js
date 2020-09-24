@@ -10,10 +10,12 @@ const InstaAccount = require("../pre-compiles/InstaAccount.json");
 const ConnectUniswapV2 = require("../pre-compiles/ConnectUniswapV2.json");
 const ConnectGelato = require("../pre-compiles/ConnectGelato.json");
 const ConnectAuth = require("../pre-compiles/ConnectAuth.json");
-const WETH9 = require("../artifacts/WETH9.json");
+const ProviderModuleDSA = require("../pre-compiles/ProviderModuleDSA.json");
+const WETH = require("../artifacts/WETH.json");
 const IERC20 = require("../pre-compiles/IERC20.json");
 
 describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our portfolio", function() {
+    this.timeout(0);
     if(bre.network.name !== "ganache") {
         console.error("Test Suite is meant to be run on ganache only");
         process.exit(1);
@@ -28,12 +30,12 @@ describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our 
     let connectUniswapV2;
     let connectGelato;
     let weth;
+    let uniswapPriceOracle;
 
     // Contracts to deploy and use for local testing
     let dsa;
     let priceFeedMock;
     let conditionCompareAssetPriceForStopLoss;
-
     
     before(async function() {
         // Get Test Wallet for local testnet
@@ -94,16 +96,18 @@ describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our 
         expect(await dsa.isAuth(gelatoCore.address)).to.be.true;
 
         // Deploy ProviderModuleDSA to local testnet
-        const ProviderModuleDSA = await ethers.getContractFactory(
-            "ProviderModuleDSA"
+        providerModuleDSA = await ethers.getContractAt(
+            ProviderModuleDSA.abi,
+            bre.network.config.ProviderModuleDSA
         );
-        providerModuleDSA = await ProviderModuleDSA.deploy(
-            instaIndex.address,
-            gelatoCore.address
-        );
-        await providerModuleDSA.deployed();
 
         // Deploy Mocks for Testing
+        const UniswapPriceOracle = await ethers.getContractFactory(
+            "UniswapPriceOracle"
+        )
+        uniswapPriceOracle = await UniswapPriceOracle.deploy();
+        await uniswapPriceOracle.deployed();
+        
         const PriceFeedDAIETH = await ethers.getContractFactory(
             "PriceFeedDAIETH"
         );
@@ -121,27 +125,16 @@ describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our 
         );
         conditionCompareAssetPriceForStopLoss = await ConditionCompareAssetPriceForStopLoss.deploy();
         await conditionCompareAssetPriceForStopLoss.deployed();
-
-        // Get WETH contract
-        weth = await ethers.getContractAt(
-            WETH9.abi,
-            bre.network.config.WETH
-        );
     })
 
     it("Stop Loss if Ether price is too low against DAI", async function() {
-
-        // #1 Send few ether on DeFi Smart Account. Now DSA have some position in regard to ether price.
-        // #2 Create the Stop Loss Condition.
-        // #3 
-
         await userWallet.sendTransaction({
             to: dsa.address,
             value: ethers.utils.parseEther("10"),
         });
         expect(await ethers.provider.getBalance(dsa.address)).to.be.equal(ethers.utils.parseEther("10"))
 
-        const limit = "300000000000000000000"; // 300 DAI
+        const limit = BigInt(await priceFeedMock.getLatestPriceToken1()) - BigInt("10000000000000000000"); // 300 DAI
 
         const stopLossCondition = new GelatoCoreLib.Condition({
              inst: conditionCompareAssetPriceForStopLoss.address,
@@ -158,22 +151,20 @@ describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our 
         // ======= Action/Spells setup ======
         const spells = [];
 
-        // spells.push(getWeth);
-
-        var ETH = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"; // Reference of Ether on uniswap
-        var buyAmount = "2900000000000000000000"; // 290 dai/ether * 10 ether in 18 decimals
+        var ETH = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"; // Reference of Ether token on instadapp
+        var sellAmount = ethers.utils.parseEther("10"); // 10 ether
         var unitAmt = "10000000000000000";
-        const connectorUniswap = new GelatoCoreLib.Action({
+        const sellPositionAction = new GelatoCoreLib.Action({
             addr: connectUniswapV2.address,
             data: await bre.run("abi-encode-withselector", {
                 abi : ConnectUniswapV2.abi,
-                functionname: "buy",
-                inputs: [bre.network.config.DAI, ETH, buyAmount, unitAmt, 0, 0], // 
+                functionname: "sell", // better to sell.
+                inputs: [bre.network.config.DAI, ETH, sellAmount, unitAmt, 0, 0], // 
             }),
             operation: GelatoCoreLib.Operation.Delegatecall,
         });
 
-        spells.push(connectorUniswap);
+        spells.push(sellPositionAction);
 
         // ======= Gelato Task Setup =========
         // A Gelato Task just combines Conditions with Actions
@@ -323,11 +314,12 @@ describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our 
             )
         ).to.be.equal("ConditionNotOk:NotOKPriceStillGreaterThanTheStopLossLimit");
 
-        const newPrice = "290000000000000000000"; // 290 DAI
+        const adjustmentValue = ethers.utils.parseEther("11"); // 290 DAI
 
-        await priceFeedMock.mock(newPrice);
+        await priceFeedMock.mock(adjustmentValue);
 
-        expect(await priceFeedMock.getLatestPriceToken1()).to.be.equal(newPrice);
+        var expectedNewPrice = String(BigInt(limit) - BigInt(ethers.utils.parseEther("1")));
+        expect(await priceFeedMock.getLatestPriceToken1()).to.be.equal(expectedNewPrice);
 
         expect(
             await gelatoCore.canExec(
@@ -345,6 +337,12 @@ describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our 
         const dsaDAIBefore = await daiToken.balanceOf(dsa.address);
         expect(dsaDAIBefore).to.be.equal(0);
 
+        // Take the expected before calling exec, because the exec will change the uniswap market price.
+        var expectedSellPrice = await uniswapPriceOracle.getPrice(
+            bre.network.config.DAI,
+            bre.network.config.WETH,
+            String(await ethers.utils.parseEther("10")));
+
         // For testing we now simulate automatic Task Execution ❗
         await expect(
             gelatoCore.exec(taskReceipt, {
@@ -353,6 +351,6 @@ describe("Stop Loss strategy for DAI/ETH increase, and we own some Ether on our 
             })
         ).to.emit(gelatoCore, "LogExecSuccess");
 
-        expect(await daiToken.balanceOf(dsa.address)).to.be.equal("2900000000000000000000");
+        expect(await daiToken.balanceOf(dsa.address)).to.be.equal(String(expectedSellPrice));
     })
 })
