@@ -5,6 +5,7 @@ const GelatoCoreLib = require("@gelatonetwork/core");
 
 require("dotenv").config();
 const INFURA_ID = process.env.INFURA_ID;
+const USER_PK_MAINNET = process.env.USER_PK_MAINNET;
 assert.ok(INFURA_ID, "no Infura ID in process.env");
 
 // ================================= CONFIG =========================================
@@ -32,6 +33,18 @@ module.exports = {
       DAIETHChainLinkAggregator: "0x773616E4d11A78F511299002da57A0a94577F1f4",
       ProviderModuleDSA: "0x0C25452d20cdFeEd2983fa9b9b9Cf4E81D6f2fE2"
     },
+    mainnet: {
+      // Standard
+      accounts: USER_PK_MAINNET ? [USER_PK_MAINNET] : [],
+      chainId: 1,
+      url: `https://mainnet.infura.io/v3/${INFURA_ID}`
+    },
+    rinkeby: {
+      // Standard
+      accounts: USER_PK_MAINNET ? [USER_PK_MAINNET] : [],
+      chainId: 4,
+      url: `https://rinkeby.infura.io/v3/${INFURA_ID}`
+    }
   },
   solc: {
     version: "0.6.12",
@@ -43,6 +56,7 @@ module.exports = {
 usePlugin("@nomiclabs/buidler-ethers");
 usePlugin("@nomiclabs/buidler-ganache");
 usePlugin("@nomiclabs/buidler-waffle");
+usePlugin("buidler-deploy");
 
 // ================================= TASKS =========================================
 task("abi-encode-withselector")
@@ -107,27 +121,27 @@ task("abi-encode-withselector")
     }
   });
 
-  task(
-    "migrate",
-    "deploy smart contract"
-  )
-    .setAction(async (taskArgs) => {
-          const userWallet = await ethers.getSigners();
-          const userAddress = await userWallet[0].getAddress();
-          const url = "http://localhost:8545";
-          const provider = new ethers.providers.JsonRpcProvider(url);
-          const signer0 = provider.getSigner(0);
-          const signer1 = provider.getSigner(1);
-          // let web3Provider = new ethers.providers.Web3Provider(currentProvider);
-          //console.log(ethers.provider, '!!!!!!!!!!!!!!!!!!!!!! TEST !!!!!!!!!!!!!!!!!!!!!');
-          //console.log(signer0);
-          const PriceFeedDAIETH = await ethers.getContractFactory(
-            "PriceFeedDAIETH"
-          );
-          const priceFeedDAIETH = await PriceFeedDAIETH.deploy();
-          // await priceFeedDAIETH.deployed();
-          // console.log(priceFeedDAIETH.address);
-    })
+  // task(
+  //   "migrate",
+  //   "deploy smart contract"
+  // )
+  //   .setAction(async (taskArgs) => {
+  //         const userWallet = await ethers.getSigners();
+  //         const userAddress = await userWallet[0].getAddress();
+  //         const url = "http://localhost:8545";
+  //         const provider = new ethers.providers.JsonRpcProvider(url);
+  //         const signer0 = provider.getSigner(0);
+  //         const signer1 = provider.getSigner(1);
+  //         // let web3Provider = new ethers.providers.Web3Provider(currentProvider);
+  //         //console.log(ethers.provider, '!!!!!!!!!!!!!!!!!!!!!! TEST !!!!!!!!!!!!!!!!!!!!!');
+  //         //console.log(signer0);
+  //         const PriceFeedDAIETH = await ethers.getContractFactory(
+  //           "PriceFeedDAIETH"
+  //         );
+  //         const priceFeedDAIETH = await PriceFeedDAIETH.deploy();
+  //         // await priceFeedDAIETH.deployed();
+  //         // console.log(priceFeedDAIETH.address);
+  //   })
 
   task(
     "fetchGelatoGasPrice",
