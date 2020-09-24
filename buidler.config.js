@@ -14,7 +14,7 @@ module.exports = {
   etherscan: {
     // The url for the Etherscan API you want to use.
     // For example, here we're using the one for the Rinkeby test network
-    url: "https://api-rinkeby.etherscan.io/api",
+    url: "https://api.etherscan.io/api",
     // Your API key for Etherscan (Obtain one at https://etherscan.io/)
     apiKey: process.env.ETHERSCAN_KEY,
   },
@@ -57,6 +57,14 @@ module.exports = {
     version: "0.6.12",
     optimizer: { enabled: true },
   },
+  paths: {
+    deploy: 'deploy'
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0, // here this will by default take the first account as deployer
+    },
+  },
 };
 
 // ================================= PLUGINS =========================================
@@ -64,6 +72,7 @@ usePlugin("@nomiclabs/buidler-ethers");
 usePlugin("@nomiclabs/buidler-ganache");
 usePlugin("@nomiclabs/buidler-waffle");
 usePlugin("buidler-deploy");
+usePlugin("@nomiclabs/buidler-etherscan");
 
 // ================================= TASKS =========================================
 task("abi-encode-withselector")
