@@ -23,6 +23,7 @@ With Take&Stop don't need to be an developer or have trust on third party to kee
 - Geloto
 - InstaDapp
 - Uniswap
+- Chainlink
 
 ## For Developer
 
