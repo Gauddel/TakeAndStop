@@ -4,6 +4,8 @@
   <img width="400" height="380" src="https://raw.githubusercontent.com/Gauddel/TakeAndStop/master/assets/Take%26Stop.png">
 </p>
 
+## [Browser Application Repo](https://github.com/Gauddel/TakeAndStopApp)
+
 Take&Stop take care of your DeFi position decentrally and autonomously.
 It's can be hard to keep track of your DeFi position, and act with no delay as the market evolved to short or to long on DeFi asset.
 
