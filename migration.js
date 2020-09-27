@@ -1,18 +1,22 @@
 const { Wallet, ethers } = require("ethers");
-const PriceFeedDAIETHJson = require("./artifacts/PriceFeedDAIETH.json");
+const PriceFeedMockETHUSDJson = require("./artifacts/PriceFeedMockETHUSD.json");
 
 async function main() {
-    const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
-    var wallet = ethers.Wallet.fromMnemonic("never dolphin sister prepare party sell fiscal palm believe slow combine inch"); // Ganache Mnemonic
+    const provider = new ethers.providers.JsonRpcProvider("http://localhost:8546");
+    var wallet = ethers.Wallet.fromMnemonic("cat hunt differ medal dutch guide farm fortune lesson episode post spin"); // Ganache Mnemonic
     wallet = wallet.connect(provider);
+    //const { 1: otherWallet } = await ethers.getSigners();
     const signer = await wallet.getAddress();
-    const PriceFeedDAIETH = await ethers.ContractFactory.fromSolidity(
-        PriceFeedDAIETHJson,
+    const PriceFeedDAIETH = new ethers.ContractFactory(
+        PriceFeedMockETHUSDJson.abi,
+        PriceFeedMockETHUSDJson.bytecode,
         wallet
     );
-    const priceFeedDAIETH = await PriceFeedDAIETH.deploy();
-    await priceFeedDAIETH.deployed();
-    console.log(priceFeedDAIETH.address, "ADDRESS of the contract");
+    const priceFeedDAIETH = await PriceFeedDAIETH.deploy({
+        gasLimit : 400000
+    });
+    await PriceFeedDAIETH.deployed();
+    //console.log(priceFeedDAIETH.address, "ADDRESS of the contract");
 }
 
 main()

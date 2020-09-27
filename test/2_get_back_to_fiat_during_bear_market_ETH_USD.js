@@ -12,6 +12,8 @@ const ConnectGelato = require("../pre-compiles/ConnectGelato.json");
 const ConnectAuth = require("../pre-compiles/ConnectAuth.json");
 const ProviderModuleDSA = require("../pre-compiles/ProviderModuleDSA.json");
 const WETH = require("../artifacts/WETH.json");
+const PriceFeedMockETHUSD = require("../artifacts/PriceFeedMockETHUSD.json");
+const ConditionCompareAssetPriceForStopLoss = require("../artifacts/ConditionCompareAssetPriceForStopLoss.json");
 const IERC20 = require("../pre-compiles/IERC20.json");
 
 describe("Stop Loss strategy for ETH/USD decrease, and we own some Ether on our portfolio", function() {
@@ -108,17 +110,16 @@ describe("Stop Loss strategy for ETH/USD decrease, and we own some Ether on our 
         uniswapPriceOracle = await UniswapPriceOracle.deploy();
         await uniswapPriceOracle.deployed();
 
-        const PriceFeedMock = await ethers.getContractFactory(
-            "PriceFeedMockETHUSD"
-        );
-        priceFeedMock = await PriceFeedMock.deploy();
-        await priceFeedMock.deployed();
+        // Use this code once buidler will support accounts for ganache
+        // priceFeedMock = await ethers.getContractAt(
+        //     PriceFeedMockETHUSD.abi,
+        //     bre.network.config.PriceFeed
+        // );
 
-        const ConditionCompareAssetPriceForStopLoss = await ethers.getContractFactory(
-            "ConditionCompareAssetPriceForStopLoss"
+        conditionCompareAssetPriceForStopLoss = await ethers.getContractAt(
+            ConditionCompareAssetPriceForStopLoss.abi,
+            bre.network.config.ConditionCompareAssetPriceForStopLoss
         );
-        conditionCompareAssetPriceForStopLoss = await ConditionCompareAssetPriceForStopLoss.deploy();
-        await conditionCompareAssetPriceForStopLoss.deployed();
     })
 
     it("Stop Loss if Ether price is too low against USD", async function() {

@@ -20,6 +20,7 @@ module.exports = {
   },
   networks: {
     ganache: {
+      // accounts: { secretKey: USER_PK_MAINNET, balance: '56BC75E2D63100000'}, // Uncomment when buidler will support ganache account.
       // Standard config
       url: "http://localhost:8545",
       fork: `https://mainnet.infura.io/v3/${INFURA_ID}`,
@@ -34,6 +35,8 @@ module.exports = {
       ConnectBasic: "0x6a31c5982C5Bc5533432913cf06a66b6D3333a95",
       ConnectUniswapV2: "0x62EbfF47B2Ba3e47796efaE7C51676762dC961c0",
       ConditionBalance: "0xd69DB9852bAbf9e0bd73B8A090382573C7488154",
+      PriceFeed: "0xB02aFF0C00a60AeB06A7b12c82214e08cCD5499f",
+      ConditionCompareAssetPriceForStopLoss: "0xEd9D452D1755160FeCd6492270Bb67F455b6b78E",
       DAI: "0x6b175474e89094c44da98b954eedeac495271d0f",
       // DAI_UNISWAP: "0xA478c2975Ab1Ea89e8196811F51A7B7Ade33eB11", // UNISWAP V2 ETH/DAI UniswapV2Pair Address
       WETH: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
@@ -44,7 +47,8 @@ module.exports = {
       // Standard
       accounts: USER_PK_MAINNET ? [USER_PK_MAINNET] : [],
       chainId: 1,
-      url: `https://mainnet.infura.io/v3/${INFURA_ID}`
+      url: `https://mainnet.infura.io/v3/${INFURA_ID}`,
+      gasPrice: parseInt(utils.parseUnits("60", "gwei"))
     },
     rinkeby: {
       // Standard

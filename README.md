@@ -23,6 +23,11 @@ With Take&Stop don't need to be an developer or have trust on third party to kee
 - Uniswap
 
 ## For Developer
+
+### Mainnet Deployement
+- [Stop Loss Condition Contract](https://etherscan.io/address/0xed9d452d1755160fecd6492270bb67f455b6b78e).
+- [ETH/USD Price Feeder](https://etherscan.io/address/0xb02aff0c00a60aeb06a7b12c82214e08ccd5499f).
+
 ### Test Task&Stop
 `1_get_back_to_fiat_during_bear_market_DAI_ETH`
 
